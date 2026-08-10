@@ -1,9 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 
-import { shouldBypassImageOptimization } from "@/lib/artwork";
+import { CardArtwork } from "@/components/card-artwork";
 import type { Card } from "@/lib/types";
 
 type CardRotatorProps = {
@@ -72,7 +71,7 @@ export function CardRotator({ card }: CardRotatorProps) {
 
   return (
     <div
-      className={`card-rotator${dragging ? " card-rotator--dragging" : ""}`}
+      className={`card-rotator card-rotator--${card.artworkOrientation}${dragging ? " card-rotator--dragging" : ""}`}
       role="group"
       aria-label={`Interactive model of ${card.name}. Drag or use arrow keys to rotate. Double-click to reset.`}
       tabIndex={0}
@@ -165,13 +164,11 @@ export function CardRotator({ card }: CardRotatorProps) {
         style={{ transform: `rotateX(${pitch}deg) rotateY(${yaw}deg)` }}
       >
         <div className="card-3d__face card-3d__face--front">
-          <Image
-            src={card.artworkUrl}
+          <CardArtwork
+            artworkUrl={card.artworkUrl}
+            orientation={card.artworkOrientation}
             alt={`${card.name} front`}
-            fill
             sizes="(max-width: 720px) 72vw, 390px"
-            draggable={false}
-            unoptimized={shouldBypassImageOptimization(card.artworkUrl)}
           />
         </div>
         <div className="card-3d__face card-3d__face--back" aria-hidden="true">

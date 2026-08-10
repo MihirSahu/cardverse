@@ -188,6 +188,11 @@ a:focus-visible,
     filter 380ms ease;
 }
 
+.landing-card.landing-card--portrait {
+  width: clamp(71px, 6.6vw, 95px);
+  aspect-ratio: 1 / 1.586;
+}
+
 .landing-card img {
   display: block;
   width: 100%;
@@ -314,7 +319,7 @@ a:focus-visible,
   text-transform: uppercase;
 }
 
-/* Infinite canvas */
+/* Card canvas */
 
 .canvas {
   position: fixed;
@@ -331,16 +336,34 @@ a:focus-visible,
   cursor: grabbing;
 }
 
+.canvas--selected {
+  cursor: default;
+}
+
 .card-world {
   position: absolute;
   z-index: 2;
-  inset: 0;
+  top: 0;
+  left: 0;
+  width: var(--world-width);
+  height: var(--world-height);
+  transform-origin: 0 0;
   transition: opacity 260ms ease, filter 260ms ease;
+  will-change: transform;
 }
 
 .canvas--selected .card-world {
   opacity: 0.3;
   filter: saturate(0.76) brightness(0.72);
+  pointer-events: none;
+}
+
+.canvas--selected .canvas-header,
+.canvas--selected .zoom-controls,
+.canvas--selected .canvas-instructions,
+.canvas--selected .keyboard-cue {
+  opacity: 0.3;
+  pointer-events: none;
 }
 
 .canvas-card {
@@ -583,7 +606,6 @@ a:focus-visible,
   box-shadow: 0 14px 30px rgba(0, 0, 0, 0.42);
 }
 
-.repeat-cue,
 .keyboard-cue {
   position: absolute;
   z-index: 8;
@@ -603,14 +625,64 @@ a:focus-visible,
   pointer-events: none;
 }
 
-.repeat-cue {
-  right: 34px;
-}
-
 .keyboard-cue {
   left: 34px;
   color: rgba(244, 247, 245, 0.56);
   border-color: rgba(244, 247, 245, 0.14);
+}
+
+.zoom-controls {
+  position: absolute;
+  z-index: 12;
+  right: 34px;
+  bottom: 31px;
+  display: flex;
+  height: 44px;
+  align-items: center;
+  overflow: hidden;
+  border: 1px solid rgba(244, 247, 245, 0.18);
+  border-radius: 24px;
+  background: rgba(2, 4, 5, 0.78);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.32);
+  backdrop-filter: blur(14px);
+  cursor: default;
+}
+
+.zoom-controls button {
+  display: grid;
+  min-width: 43px;
+  height: 100%;
+  padding: 0 13px;
+  place-items: center;
+  border: 0;
+  border-right: 1px solid rgba(244, 247, 245, 0.12);
+  background: transparent;
+  color: var(--starlight);
+  cursor: pointer;
+  font-size: 21px;
+  line-height: 1;
+}
+
+.zoom-controls button:last-child {
+  border-right: 0;
+}
+
+.zoom-controls button:hover:not(:disabled),
+.zoom-controls button:focus-visible {
+  background: rgba(244, 247, 245, 0.08);
+}
+
+.zoom-controls button:disabled {
+  color: rgba(244, 247, 245, 0.24);
+  cursor: not-allowed;
+}
+
+.zoom-controls .zoom-level {
+  min-width: 66px;
+  color: var(--cyan);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
 }
 
 .empty-state {
@@ -710,6 +782,12 @@ a:focus-visible,
   cursor: grab;
   perspective: 1150px;
   touch-action: none;
+}
+
+.card-rotator.card-rotator--portrait {
+  width: 63%;
+  aspect-ratio: 1 / 1.586;
+  margin-inline: auto;
 }
 
 .card-rotator--dragging {
@@ -1259,16 +1337,23 @@ a:focus-visible,
     height: 48px;
   }
 
-  .repeat-cue {
-    right: 50%;
-    bottom: 4px;
-    height: 27px;
-    transform: translateX(50%);
-    font-size: 7px;
-  }
-
   .keyboard-cue {
     display: none;
+  }
+
+  .zoom-controls {
+    right: 16px;
+    bottom: 18px;
+    height: 40px;
+  }
+
+  .zoom-controls button {
+    min-width: 39px;
+    padding: 0 11px;
+  }
+
+  .zoom-controls .zoom-level {
+    min-width: 58px;
   }
 
   .canvas--selected .canvas-header {

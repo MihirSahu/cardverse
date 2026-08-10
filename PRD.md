@@ -8,7 +8,7 @@
 
 ## 1. Product summary
 
-Cardverse is a visual browser for popular US consumer credit cards. It presents cards on a boundaryless, starfield-style canvas that users can pan in any direction. Selecting a card opens concise educational information without navigating to a separate detail page.
+Cardverse is a visual browser for popular US consumer credit cards. It presents cards on a bounded, starfield-style canvas that users can pan and zoom. Selecting a card opens concise educational information without navigating to a separate detail page.
 
 The product is for browsing and education. It does not collect financial information, create personalized recommendations, estimate approval odds, or require an account.
 
@@ -37,8 +37,8 @@ Cardverse should make it easy to:
 
 ### MVP goals
 
-- Launch with a curated set of approximately 28 popular US consumer credit cards.
-- Provide an infinite-feeling canvas that repeats seamlessly in every direction.
+- Launch with a curated set of 53 US consumer credit cards.
+- Provide a bounded spatial canvas with smooth panning and zooming.
 - Allow users to filter cards through predefined filters only.
 - Show actual card artwork for every listed product.
 - Open card education in a desktop sidebar or mobile bottom sheet.
@@ -101,14 +101,19 @@ Navigation methods:
 - Trackpad or mouse-wheel panning.
 - Arrow keys.
 - Single-finger drag on touch devices.
+- On-screen zoom controls.
+- Control/Command plus wheel or trackpad gesture.
+- Plus, minus, and zero keyboard shortcuts for zoom in, zoom out, and reset.
 
 Behavior:
 
-- The field has no visible boundary.
-- Moving beyond the virtual field width or height wraps the camera position to the corresponding location.
-- The repeat must be seamless in both axes and must not show an empty seam.
+- The field has finite horizontal and vertical boundaries.
+- Boundaries are behavioral only and do not render a visible outline or container edge.
+- Panning clamps at the field edges so the card collection cannot be lost off-screen.
+- Zoom remains anchored around the pointer or viewport center and is limited to useful minimum and maximum levels.
 - Cards remain level; they are not randomly tilted.
-- Cards vary in position and visual depth without becoming a rigid grid.
+- The canvas uses a Cash App-inspired staggered field: one prominent centered card, smaller cards entering from alternating side lanes, and partial cards above and below the center lane.
+- The landing page retains its separate, loosely scattered card composition.
 - Edge-cropped cards are intentional and signal that more content exists outside the viewport.
 - A card near the viewport center receives stronger emphasis and a concise label.
 - Panning remains available after filters are applied.
@@ -119,7 +124,7 @@ Desktop controls:
 - Visible card count.
 - Filter control.
 - Subtle drag affordance.
-- Seamless-field cue during initial onboarding.
+- Visible zoom controls and keyboard-navigation cue.
 
 Mobile controls:
 
@@ -172,7 +177,7 @@ Mobile:
 
 Closing the panel returns the user to the same canvas position and filter state.
 
-The selected card is represented in the URL, for example `/cards?card=chase-sapphire-preferred`, without creating a separate detail-page template.
+The selected card is represented in the URL, for example `/cards?card=amex-platinum`, without creating a separate detail-page template.
 
 ### 6.5 Card education panel
 
@@ -264,7 +269,7 @@ Cardverse will maintain an internal editorial configuration containing:
 - `issuerUrl`
 - `ratesAndFeesUrl`
 
-The initial set is approximately 28 cards and can be updated without a deployment if the configuration is moved to a CMS later.
+The initial set is 53 cards and can be updated without a deployment if the configuration is moved to a CMS later.
 
 ### 7.4 Artwork
 
@@ -280,10 +285,12 @@ Before launch, the team must:
 
 ### 7.5 Freshness and caching
 
-- Cache list responses for up to 24 hours.
-- Cache card-detail responses and revalidate when a CardAPI webhook reports a change.
+- Read card lists and card details from a durable Drizzle-managed database rather than calling CardAPI during page rendering.
+- Refresh the database from CardAPI's paginated US-card list and full details for matched cards on a 24-hour schedule, with a configurable per-run request ceiling.
+- Preserve the previous successful snapshot when a page, provider request, normalization step, or transaction fails.
+- Record refresh status, request count, card count, timestamps, and safe error details for operational review.
+- Back off failed scheduled refreshes so a provider outage cannot exhaust the daily quota.
 - Display the source update date in the education panel.
-- Keep the most recent valid cached response during a temporary provider outage.
 - Flag stale data internally after 48 hours without a successful refresh.
 - Unpublish a card if critical fee or application-link data cannot be verified.
 
@@ -294,7 +301,7 @@ Before launch, the team must:
 | FR-001 | The landing page presents Cardverse, its factual description, a zoomed-out card field, and an Explore cards action. | Must |
 | FR-002 | Explore cards transitions to the main canvas. | Must |
 | FR-003 | The main canvas pans through pointer, wheel/trackpad, keyboard, and touch input. | Must |
-| FR-004 | The canvas wraps seamlessly on both axes. | Must |
+| FR-004 | The canvas has finite pan boundaries and supports bounded zoom controls and keyboard shortcuts. | Must |
 | FR-005 | Cards use approved actual artwork and remain level. | Must |
 | FR-006 | Users can apply predefined filters without entering personal information. | Must |
 | FR-007 | Selecting a card opens a sidebar on desktop and bottom sheet on mobile. | Must |
@@ -373,16 +380,17 @@ Initial targets on a mid-range mobile device and typical 4G connection:
 - `/` for the landing page.
 - `/cards` for the interactive canvas.
 - Query parameters for filters and selected-card state.
-- Server-only CardAPI client and normalization layer.
-- Cached normalized data returned to the client through server components or internal route handlers.
+- Server-only CardAPI refresh and normalization worker.
+- Drizzle ORM repository backed by local SQLite initially and a remotely hosted database later.
+- Database-only reads returned to the client through server components.
 
 ### Canvas model
 
 - Use a deterministic base layout for the curated card set.
-- Repeat the base layout as virtual tiles surrounding the viewport.
-- Wrap the logical camera coordinate after it crosses a tile boundary.
-- Keep logical positions separate from rendered positions to avoid floating-point drift.
-- Render only the current tile and neighboring tiles needed to cover the viewport.
+- Place the curated set within a finite world whose height can expand for future cards.
+- Clamp camera coordinates at invisible world boundaries with a small visual gutter.
+- Apply zoom around the pointer or viewport center while preserving those boundaries.
+- Keep logical positions separate from rendered transforms to avoid floating-point drift.
 - Preserve the same layout seed across sessions so the field feels learnable.
 
 ### 3D implementation
@@ -479,7 +487,7 @@ These targets are hypotheses and should be revised after a baseline traffic peri
 
 ### Main canvas
 
-- A tester can pan continuously for at least three full virtual-field widths or heights without seeing a seam, blank region, or jump.
+- A tester can reach every canvas boundary without a jump or exposing a blank region beyond the intended gutter.
 - Pointer, touch, wheel/trackpad, and keyboard navigation work.
 - Every published card is reachable.
 - Cards remain level at rest.
@@ -511,14 +519,14 @@ These targets are hypotheses and should be revised after a baseline traffic peri
 - Secure artwork rights and card-back treatment.
 - Editorially verify every fee, offer, reward cap, APR, URL, and summary.
 - Complete accessibility testing with keyboard, screen reader, reduced motion, and touch input.
-- Test canvas wrapping across supported viewport sizes and zoom levels.
+- Test canvas boundaries across supported viewport sizes and zoom levels.
 - Validate analytics and consent behavior.
 - Add financial-information and affiliate disclosures as applicable.
 - Establish an incident process for stale or incorrect card data.
 
 ## 18. Open decisions
 
-1. What objective source or editorial method defines “popular” for the initial 28 cards?
+1. What objective source or editorial method defines “popular” for the initial 53 cards?
 2. Will issuer links be direct or affiliate links?
 3. Does the selected CardAPI plan include every endpoint and webhook required by the MVP?
 4. Does CardAPI provide artwork with acceptable usage rights, or will artwork be managed separately?
@@ -539,4 +547,3 @@ These targets are hypotheses and should be revised after a baseline traffic peri
 
 - [CardAPI API reference](https://cardapi.dev/docs)
 - [CardAPI product overview](https://cardapi.dev/)
-

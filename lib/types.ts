@@ -31,6 +31,7 @@ export type WorldPosition = {
 };
 
 export type CardDataSource = "cardapi" | "editorial-fallback";
+export type ArtworkOrientation = "landscape" | "portrait";
 
 export type Card = {
   id: string;
@@ -52,6 +53,7 @@ export type Card = {
   goodToKnow: string;
   filters: CardFilter[];
   artworkUrl: string;
+  artworkOrientation: ArtworkOrientation;
   issuerUrl: string;
   ratesAndFeesUrl: string;
   updatedAt: string;

@@ -1,13 +1,12 @@
 "use client";
 
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import type { CSSProperties } from "react";
 
+import { CardArtwork } from "@/components/card-artwork";
 import { ArrowIcon } from "@/components/icons";
 import { StarField } from "@/components/star-field";
-import { shouldBypassImageOptimization } from "@/lib/artwork";
 import type { Card } from "@/lib/types";
 
 type LandingProps = {
@@ -30,6 +29,7 @@ export function Landing({ cards }: LandingProps) {
   const router = useRouter();
   const [entering, setEntering] = useState(false);
   const displayedCards = useMemo(() => cards.slice(0, positions.length), [cards]);
+  const entryCardId = displayedCards[0]?.id;
 
   function enterCanvas() {
     if (entering) return;
@@ -58,17 +58,15 @@ export function Landing({ cards }: LandingProps) {
           } as CSSProperties;
           return (
             <div
-              className={`landing-card${card.id === "chase-sapphire-preferred" ? " landing-card--entry" : ""}`}
+              className={`landing-card landing-card--${card.artworkOrientation}${card.id === entryCardId ? " landing-card--entry" : ""}`}
               key={card.id}
               style={style}
             >
-              <Image
-                src={card.artworkUrl}
+              <CardArtwork
+                artworkUrl={card.artworkUrl}
+                orientation={card.artworkOrientation}
                 alt=""
-                fill
                 sizes="(max-width: 720px) 30vw, 150px"
-                draggable={false}
-                unoptimized={shouldBypassImageOptimization(card.artworkUrl)}
               />
             </div>
           );

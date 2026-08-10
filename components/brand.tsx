@@ -4,7 +4,7 @@ export function Brand({ compact = false }: { compact?: boolean }) {
       <span className="brand-mark" aria-hidden="true">C</span>
       <span className="brand-copy">
         <span className="brand-name">Cardverse</span>
-        {!compact && <span className="brand-kicker">Infinite card canvas</span>}
+        {!compact && <span className="brand-kicker">Explore the card field</span>}
       </span>
     </div>
   );

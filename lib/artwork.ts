@@ -1,11 +1,29 @@
-const OPTIMIZED_ARTWORK_HOSTS = new Set([
-  "creditcards.chase.com",
-  "icm.aexp-static.com",
-]);
+export const pendingArtworkUrl = "/cards/artwork-pending.svg";
+
+export const optimizedArtworkPatterns = [
+  {
+    hostname: "creditcards.chase.com",
+    pathnamePrefix: "/content/dam/jpmc-marketplace/card-art/",
+  },
+  {
+    hostname: "icm.aexp-static.com",
+    pathnamePrefix: "/Internet/Acquisition/US_en/AppContent/OneSite/category/cardarts/",
+  },
+  {
+    hostname: "icm.aexp-static.com",
+    pathnamePrefix: "/acquisition/card-art/",
+  },
+] as const;
 
 export function shouldBypassImageOptimization(url: string) {
   try {
-    return !OPTIMIZED_ARTWORK_HOSTS.has(new URL(url).hostname.toLowerCase());
+    const parsed = new URL(url);
+    const hostname = parsed.hostname.toLowerCase();
+    const pathname = parsed.pathname;
+
+    return !optimizedArtworkPatterns.some((pattern) =>
+      hostname === pattern.hostname && pathname.startsWith(pattern.pathnamePrefix),
+    );
   } catch {
     return true;
   }

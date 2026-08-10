@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   description: "Explore popular US consumer credit cards on an interactive canvas.",
 };
 
-export const revalidate = 86_400;
+export const dynamic = "force-dynamic";
 
 type CardsPageProps = {
   searchParams: Promise<{ filter?: string; card?: string }>;

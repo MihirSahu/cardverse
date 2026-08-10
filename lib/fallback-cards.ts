@@ -1,274 +1,164 @@
-import type { Card } from "@/lib/types";
+import type { ArtworkOrientation, Card, CardFilter } from "@/lib/types";
+import { pendingArtworkUrl } from "@/lib/artwork";
 
-const verifiedAt = "2026-07-31T12:00:00.000Z";
+const reviewedAt = "2026-08-05T12:00:00.000Z";
+export { pendingArtworkUrl } from "@/lib/artwork";
 
-const fallbackCardDefinitions: Array<Omit<Card, "dataSource">> = [
-  {
-    id: "chase-sapphire-preferred",
-    name: "Chase Sapphire Preferred®",
-    shortName: "Sapphire Preferred",
-    issuer: "Chase",
-    network: "Visa",
-    category: "Travel",
-    annualFee: 95,
-    annualFeeLabel: "$95",
-    foreignTransactionFee: "$0",
-    purchaseApr: "19.24%–27.49% variable",
-    welcomeOffer: {
-      amount: "75,000 pts",
-      requirement: "After qualifying purchases; verify the current issuer offer.",
-    },
-    rewardRates: [
-      { category: "dining", label: "Dining", rate: 3, type: "multiplier" },
-      { category: "travel", label: "Other travel", rate: 2, type: "multiplier" },
-    ],
-    rewardSummary: "3× dining · 2× travel",
-    benefits: ["Flexible points", "Travel protections", "Transfer partners"],
-    applicationRules: ["Approval and offer eligibility are determined by the issuer."],
-    editorialSummary: "Easy to understand and broadly useful.",
-    goodToKnow: "Points can transfer to airline and hotel partners. Offer terms and eligibility rules apply.",
-    filters: ["travel", "dining", "no-foreign-fee"],
-    artworkUrl:
-      "https://creditcards.chase.com/content/dam/jpmc-marketplace/card-art/sapphire-preferredcard2026.png",
-    issuerUrl: "https://creditcards.chase.com/rewards-credit-cards/sapphire/preferred",
-    ratesAndFeesUrl: "https://creditcards.chase.com/rewards-credit-cards/sapphire/preferred",
-    updatedAt: verifiedAt,
-    world: { x: 535, y: 350, scale: 1, depth: "near" },
-  },
-  {
-    id: "amex-gold",
-    name: "American Express® Gold Card",
-    shortName: "Amex Gold",
-    issuer: "American Express",
-    network: "American Express",
-    category: "Dining",
-    annualFee: 325,
-    annualFeeLabel: "$325",
-    foreignTransactionFee: "$0",
-    purchaseApr: "See rates & fees",
-    welcomeOffer: { amount: "See current offer" },
-    rewardRates: [
-      { category: "dining", label: "Restaurants", rate: 4, type: "multiplier" },
-      { category: "groceries", label: "U.S. supermarkets", rate: 4, type: "multiplier" },
-    ],
-    rewardSummary: "4× dining · 4× groceries",
-    benefits: ["Dining credits", "Uber Cash", "Hotel Collection credit"],
-    applicationRules: ["Enrollment and benefit terms apply."],
-    editorialSummary: "Strong food rewards with credits to keep track of.",
-    goodToKnow: "The value depends on whether the included credits fit your normal spending.",
-    filters: ["travel", "dining", "groceries", "no-foreign-fee"],
-    artworkUrl:
-      "https://icm.aexp-static.com/Internet/Acquisition/US_en/AppContent/OneSite/category/cardarts/gold-card.png",
-    issuerUrl: "https://www.americanexpress.com/us/credit-cards/card/gold-card/",
-    ratesAndFeesUrl: "https://www.americanexpress.com/us/credit-cards/card/gold-card/",
-    updatedAt: verifiedAt,
-    world: { x: -40, y: 125, scale: 0.72, depth: "mid" },
-  },
-  {
-    id: "chase-sapphire-reserve",
-    name: "Chase Sapphire Reserve®",
-    shortName: "Sapphire Reserve",
-    issuer: "Chase",
-    network: "Visa",
-    category: "Premium travel",
-    annualFee: 795,
-    annualFeeLabel: "$795",
-    foreignTransactionFee: "$0",
-    purchaseApr: "See rates & fees",
-    welcomeOffer: { amount: "See current offer" },
-    rewardRates: [
-      { category: "travel", label: "Chase Travel", rate: 8, type: "multiplier" },
-      { category: "dining", label: "Dining", rate: 3, type: "multiplier" },
-    ],
-    rewardSummary: "8× Chase Travel · 3× dining",
-    benefits: ["Travel credit", "Airport lounge access", "Travel protections"],
-    applicationRules: ["Premium benefits and credit terms apply."],
-    editorialSummary: "A premium travel card with a premium price.",
-    goodToKnow: "The annual fee only makes sense when the credits and travel benefits are used consistently.",
-    filters: ["travel", "dining", "no-foreign-fee"],
-    artworkUrl:
-      "https://creditcards.chase.com/content/dam/jpmc-marketplace/card-art/sapphire_reserve_card_Halo.png",
-    issuerUrl: "https://creditcards.chase.com/rewards-credit-cards/sapphire/reserve",
-    ratesAndFeesUrl: "https://creditcards.chase.com/rewards-credit-cards/sapphire/reserve",
-    updatedAt: verifiedAt,
-    world: { x: 1210, y: 150, scale: 0.75, depth: "mid" },
-  },
-  {
-    id: "chase-freedom-unlimited",
-    name: "Chase Freedom Unlimited®",
-    shortName: "Freedom Unlimited",
-    issuer: "Chase",
-    network: "Visa",
-    category: "Cash back",
-    annualFee: 0,
-    annualFeeLabel: "$0",
-    foreignTransactionFee: "3%",
-    purchaseApr: "See rates & fees",
-    welcomeOffer: { amount: "See current offer" },
-    rewardRates: [
-      { category: "dining", label: "Dining", rate: 3, type: "cashback_percent" },
-      { category: "other", label: "All other purchases", rate: 1.5, type: "cashback_percent" },
-    ],
-    rewardSummary: "3% dining · 1.5% other",
-    benefits: ["No annual fee", "Simple base rewards", "Purchase protection"],
-    applicationRules: ["Introductory APR and offer eligibility vary."],
-    editorialSummary: "Simple cash back without an annual fee.",
-    goodToKnow: "Foreign transaction fees make it less useful for purchases abroad.",
-    filters: ["cash-back", "dining", "no-annual-fee", "intro-apr"],
-    artworkUrl:
-      "https://creditcards.chase.com/content/dam/jpmc-marketplace/card-art/freedom_unlimited_card_alt.png",
-    issuerUrl: "https://creditcards.chase.com/cash-back-credit-cards/freedom/unlimited",
-    ratesAndFeesUrl: "https://creditcards.chase.com/cash-back-credit-cards/freedom/unlimited",
-    updatedAt: verifiedAt,
-    world: { x: 80, y: 650, scale: 0.78, depth: "mid" },
-  },
-  {
-    id: "world-of-hyatt",
-    name: "World of Hyatt Credit Card",
-    shortName: "World of Hyatt",
-    issuer: "Chase",
-    network: "Visa",
-    category: "Hotel travel",
-    annualFee: 95,
-    annualFeeLabel: "$95",
-    foreignTransactionFee: "$0",
-    purchaseApr: "See rates & fees",
-    welcomeOffer: { amount: "See current offer" },
-    rewardRates: [
-      { category: "hotels", label: "Hyatt stays", rate: 4, type: "multiplier" },
-      { category: "travel", label: "Transit", rate: 2, type: "multiplier" },
-    ],
-    rewardSummary: "4× Hyatt · 2× transit",
-    benefits: ["Annual free night", "Hyatt Discoverist status", "Bonus qualifying nights"],
-    applicationRules: ["Hyatt and issuer program terms apply."],
-    editorialSummary: "Most useful for people who already choose Hyatt.",
-    goodToKnow: "Hotel points are less flexible than general travel rewards.",
-    filters: ["travel", "no-foreign-fee"],
-    artworkUrl:
-      "https://creditcards.chase.com/content/dam/jpmc-marketplace/card-art/world_of_hyatt_card.png",
-    issuerUrl: "https://creditcards.chase.com/travel-credit-cards/world-of-hyatt-credit-card",
-    ratesAndFeesUrl: "https://creditcards.chase.com/travel-credit-cards/world-of-hyatt-credit-card",
-    updatedAt: verifiedAt,
-    world: { x: 1110, y: 685, scale: 0.8, depth: "mid" },
-  },
-  {
-    id: "marriott-bonvoy-boundless",
-    name: "Marriott Bonvoy Boundless® Credit Card",
-    shortName: "Marriott Boundless",
-    issuer: "Chase",
-    network: "Visa",
-    category: "Hotel travel",
-    annualFee: 95,
-    annualFeeLabel: "$95",
-    foreignTransactionFee: "$0",
-    purchaseApr: "See rates & fees",
-    welcomeOffer: { amount: "See current offer" },
-    rewardRates: [
-      { category: "hotels", label: "Marriott stays", rate: 6, type: "multiplier" },
-      { category: "other", label: "Other purchases", rate: 2, type: "multiplier" },
-    ],
-    rewardSummary: "6× Marriott · 2× other",
-    benefits: ["Annual free night", "Automatic elite night credits", "Silver Elite status"],
-    applicationRules: ["Marriott and issuer program terms apply."],
-    editorialSummary: "A straightforward companion for Marriott stays.",
-    goodToKnow: "The annual free night is the main reason to keep the card long term.",
-    filters: ["travel", "no-foreign-fee"],
-    artworkUrl:
-      "https://creditcards.chase.com/content/dam/jpmc-marketplace/card-art/marriott-bonvoy-boundless-card.png",
-    issuerUrl: "https://creditcards.chase.com/travel-credit-cards/marriott-bonvoy/boundless",
-    ratesAndFeesUrl: "https://creditcards.chase.com/travel-credit-cards/marriott-bonvoy/boundless",
-    updatedAt: verifiedAt,
-    world: { x: 300, y: -25, scale: 0.68, depth: "far" },
-  },
-  {
-    id: "southwest-rapid-rewards-plus",
-    name: "Southwest Rapid Rewards® Plus Credit Card",
-    shortName: "Southwest Plus",
-    issuer: "Chase",
-    network: "Visa",
-    category: "Airline travel",
-    annualFee: 99,
-    annualFeeLabel: "$99",
-    foreignTransactionFee: "$0",
-    purchaseApr: "See rates & fees",
-    welcomeOffer: { amount: "See current offer" },
-    rewardRates: [
-      { category: "travel", label: "Southwest purchases", rate: 2, type: "multiplier" },
-      { category: "transit", label: "Local transit", rate: 2, type: "multiplier" },
-    ],
-    rewardSummary: "2× Southwest · 2× transit",
-    benefits: ["Anniversary points", "Checked bag benefits", "Seat selection benefits"],
-    applicationRules: ["Southwest and issuer program terms apply."],
-    editorialSummary: "A practical entry card for regular Southwest flyers.",
-    goodToKnow: "Airline-specific rewards are best when Southwest already fits your travel patterns.",
-    filters: ["travel", "no-foreign-fee"],
-    artworkUrl:
-      "https://creditcards.chase.com/content/dam/jpmc-marketplace/card-art/swa_plus_card_New.png",
-    issuerUrl: "https://creditcards.chase.com/travel-credit-cards/southwest/plus",
-    ratesAndFeesUrl: "https://creditcards.chase.com/travel-credit-cards/southwest/plus",
-    updatedAt: verifiedAt,
-    world: { x: 880, y: 1010, scale: 0.72, depth: "far" },
-  },
-  {
-    id: "chase-freedom-flex",
-    name: "Chase Freedom Flex®",
-    shortName: "Freedom Flex",
-    issuer: "Chase",
-    network: "Mastercard",
-    category: "Cash back",
-    annualFee: 0,
-    annualFeeLabel: "$0",
-    foreignTransactionFee: "3%",
-    purchaseApr: "See rates & fees",
-    welcomeOffer: { amount: "See current offer" },
-    rewardRates: [
-      { category: "rotating", label: "Rotating categories", rate: 5, type: "cashback_percent" },
-      { category: "dining", label: "Dining", rate: 3, type: "cashback_percent" },
-    ],
-    rewardSummary: "5% rotating · 3% dining",
-    benefits: ["No annual fee", "Rotating bonus categories", "Cell phone protection"],
-    applicationRules: ["Quarterly category activation and spending caps apply."],
-    editorialSummary: "High category rewards if you do not mind activating them.",
-    goodToKnow: "The highest rate is capped and changes each quarter.",
-    filters: ["cash-back", "dining", "gas", "no-annual-fee", "intro-apr"],
-    artworkUrl:
-      "https://creditcards.chase.com/content/dam/jpmc-marketplace/card-art/freedom_flex_card_alt.png",
-    issuerUrl: "https://creditcards.chase.com/cash-back-credit-cards/freedom/flex",
-    ratesAndFeesUrl: "https://creditcards.chase.com/cash-back-credit-cards/freedom/flex",
-    updatedAt: verifiedAt,
-    world: { x: -50, y: 1000, scale: 0.72, depth: "far" },
-  },
-  {
-    id: "chase-freedom-rise",
-    name: "Chase Freedom Rise®",
-    shortName: "Freedom Rise",
-    issuer: "Chase",
-    network: "Visa",
-    category: "Starter cash back",
-    annualFee: 0,
-    annualFeeLabel: "$0",
-    foreignTransactionFee: "3%",
-    purchaseApr: "See rates & fees",
-    welcomeOffer: { amount: "See current offer" },
-    rewardRates: [
-      { category: "other", label: "All purchases", rate: 1.5, type: "cashback_percent" },
-    ],
-    rewardSummary: "1.5% cash back",
-    benefits: ["No annual fee", "Simple rewards", "Automatic credit line review"],
-    applicationRules: ["Approval remains subject to issuer underwriting."],
-    editorialSummary: "A simple starting point for building credit history.",
-    goodToKnow: "Its rewards are uncomplicated, but it charges a foreign transaction fee.",
-    filters: ["cash-back", "no-annual-fee"],
-    artworkUrl:
-      "https://creditcards.chase.com/content/dam/jpmc-marketplace/card-art/freedom_rise_alt_card2.png",
-    issuerUrl: "https://creditcards.chase.com/cash-back-credit-cards/freedom/rise",
-    ratesAndFeesUrl: "https://creditcards.chase.com/cash-back-credit-cards/freedom/rise",
-    updatedAt: verifiedAt,
-    world: { x: 1040, y: -20, scale: 0.7, depth: "far" },
-  },
+const issuersWithoutForeignTransactionFees = new Set(["Capital One", "Discover"]);
+
+type Seed = {
+  id: string;
+  name: string;
+  issuer: string;
+  category: string;
+  annualFeeLabel: string;
+  welcomeOffer: string | null;
+  rewardSummary: string;
+  purchaseApr: string;
+  network: string;
+  issuerUrl: string;
+  ratesAndFeesUrl?: string;
+  artworkUrl: string;
+  artworkOrientation?: ArtworkOrientation;
+  foreignTransactionFee?: string;
+  extraFilters?: CardFilter[];
+};
+
+function annualFeeFromLabel(label: string) {
+  if (/verify/i.test(label)) return -1;
+  const amounts = Array.from(label.matchAll(/\$([\d,]+)/g), (match) => Number(match[1].replaceAll(",", "")));
+  return amounts.length ? Math.max(...amounts) : -1;
+}
+
+function inferFilters(seed: Seed, annualFee: number): CardFilter[] {
+  const value = `${seed.category} ${seed.rewardSummary}`.toLowerCase();
+  const filters = new Set<CardFilter>(seed.extraFilters ?? []);
+
+  if (/travel|hotel|airline|miles|housing/.test(value)) filters.add("travel");
+  if (/cash back|cash rewards|cashback/.test(value)) filters.add("cash-back");
+  if (/dining|restaurant/.test(value)) filters.add("dining");
+  if (/grocer|supermarket/.test(value)) filters.add("groceries");
+  if (/\bgas\b|ev charging/.test(value)) filters.add("gas");
+  if (annualFee === 0) filters.add("no-annual-fee");
+  if (
+    seed.foreignTransactionFee === "$0" ||
+    issuersWithoutForeignTransactionFees.has(seed.issuer) ||
+    /no foreign transaction fee/.test(value)
+  ) {
+    filters.add("no-foreign-fee");
+  }
+  if (/intro apr/i.test(seed.purchaseApr)) filters.add("intro-apr");
+
+  return Array.from(filters);
+}
+
+function toCard(seed: Seed, index: number): Card {
+  const annualFee = annualFeeFromLabel(seed.annualFeeLabel);
+  const benefits = seed.rewardSummary
+    .split(";")
+    .map((benefit) => benefit.trim())
+    .filter(Boolean)
+    .slice(0, 4);
+
+  return {
+    id: seed.id,
+    name: seed.name,
+    shortName: seed.name,
+    issuer: seed.issuer,
+    network: seed.network,
+    category: seed.category,
+    annualFee,
+    annualFeeLabel: seed.annualFeeLabel,
+    foreignTransactionFee: seed.foreignTransactionFee ??
+      (issuersWithoutForeignTransactionFees.has(seed.issuer) ? "$0" : "See issuer"),
+    purchaseApr: seed.purchaseApr,
+    welcomeOffer: seed.welcomeOffer ? { amount: seed.welcomeOffer } : null,
+    rewardRates: [],
+    rewardSummary: seed.rewardSummary,
+    benefits: benefits.length ? benefits : ["Review the issuer's current benefit guide."],
+    applicationRules: ["Approval, offer eligibility, and product terms are determined by the issuer."],
+    editorialSummary: `${seed.name} is positioned for ${seed.category.toLowerCase()}.`,
+    goodToKnow: "Compare the current issuer terms with your expected spending and redemption preferences.",
+    filters: inferFilters(seed, annualFee),
+    artworkUrl: seed.artworkUrl,
+    artworkOrientation: seed.artworkOrientation ?? "landscape",
+    issuerUrl: seed.issuerUrl,
+    ratesAndFeesUrl: seed.ratesAndFeesUrl ?? "",
+    updatedAt: reviewedAt,
+    dataSource: "editorial-fallback",
+    world: { x: 0, y: 0, scale: index === 0 ? 0.95 : 0.58, depth: index === 0 ? "near" : "far" },
+  };
+}
+
+const seeds: Seed[] = [
+  // American Express
+  { id: "amex-platinum", name: "Platinum Card®", issuer: "American Express", category: "Premium travel", annualFeeLabel: "$895", welcomeOffer: "As high as 175,000 Membership Rewards points after $12,000 in 6 months", rewardSummary: "5X prepaid hotels and flights through Amex Travel; 1,550+ lounges; up to $600 annual select prepaid-hotel credits", purchaseApr: "Charge-card terms; verify current Pay Over Time APR", network: "American Express", issuerUrl: "https://www.americanexpress.com/us/credit-cards/card/platinum/", ratesAndFeesUrl: "https://www.americanexpress.com/en-us/credit-cards/apply/terms/personal/platinum-card/25330-10-0/", artworkUrl: "https://www.aexp-static.com/online/myca/shared/summary/cardasset/images/NUS000000363_480x304_STRAIGHT_96.png", foreignTransactionFee: "$0" },
+  { id: "amex-gold", name: "American Express® Gold Card", issuer: "American Express", category: "Dining and groceries", annualFeeLabel: "$325", welcomeOffer: "As high as 100,000 Membership Rewards points after $8,000 in 6 months", rewardSummary: "4X restaurants worldwide up to $50,000/year; 4X U.S. supermarkets up to $25,000/year; 5X prepaid hotels through Amex Travel", purchaseApr: "Charge-card terms; verify current Pay Over Time APR", network: "American Express", issuerUrl: "https://www.americanexpress.com/us/credit-cards/card/gold-card/", ratesAndFeesUrl: "https://www.americanexpress.com/en-us/credit-cards/apply/terms/personal/gold-card/25330-10-0/", artworkUrl: "https://www.aexp-static.com/online/myca/shared/summary/cardasset/images/NUS000000174_480x304_STRAIGHT_96.png", foreignTransactionFee: "$0" },
+  { id: "amex-blue-cash-preferred", name: "Blue Cash Preferred® Card", issuer: "American Express", category: "Cash back / groceries", annualFeeLabel: "$0 first year, then $95", welcomeOffer: "As high as $300 after $3,000 in 6 months", rewardSummary: "6% at U.S. supermarkets up to $6,000/year; 6% select U.S. streaming; 3% transit", purchaseApr: "Intro APR shown by issuer; exact duration and range need verification", network: "American Express", issuerUrl: "https://www.americanexpress.com/us/credit-cards/card/blue-cash-preferred/", ratesAndFeesUrl: "https://www.americanexpress.com/us/credit-cards/card-application/apply/prospect/terms/blue-cash-preferred-credit-card/25330-10-0", artworkUrl: "https://icm.aexp-static.com/acquisition/card-art/NUS000000264_480x304_straight_withname.png" },
+  { id: "amex-blue-cash-everyday", name: "Blue Cash Everyday® Card", issuer: "American Express", category: "Everyday cash back", annualFeeLabel: "$0", welcomeOffer: "Verify current issuer offer", rewardSummary: "Everyday grocery, online-retail, and gas rewards; verify current category terms", purchaseApr: "Verify current intro APR", network: "American Express", issuerUrl: "https://www.americanexpress.com/us/credit-cards/card/blue-cash-everyday/", artworkUrl: "https://icm.aexp-static.com/acquisition/card-art/NUS000000305_480x304_straight_withname.png" },
+
+  // Capital One
+  { id: "capital-one-platinum", name: "Platinum Mastercard®", issuer: "Capital One", category: "Fair credit / credit building", annualFeeLabel: "$0", welcomeOffer: null, rewardSummary: "Credit building with responsible use", purchaseApr: "28.99% variable APR", network: "Mastercard", issuerUrl: "https://www.capitalone.com/credit-cards/platinum/", artworkUrl: "https://ecm.capitalone.com/WCM/card/products/plat_cardart_prim_323x203.png" },
+  { id: "capital-one-venture-x", name: "Venture X Rewards", issuer: "Capital One", category: "Premium travel", annualFeeLabel: "$395", welcomeOffer: "75,000 miles after $4,000 in 3 months", rewardSummary: "2X everywhere; 1,300+ lounges; 10,000 anniversary miles; $300 annual Capital One Travel credit", purchaseApr: "19.49%–28.49% variable APR", network: "Visa", issuerUrl: "https://www.capitalone.com/credit-cards/venture-x/", artworkUrl: "https://ecm.capitalone.com/WCM/card/products/venture-x-card-art.png" },
+  { id: "capital-one-venture", name: "Venture Rewards", issuer: "Capital One", category: "Travel", annualFeeLabel: "$95", welcomeOffer: "75,000 miles after $4,000 in 3 months", rewardSummary: "2X miles on every purchase", purchaseApr: "19.49%–28.49% variable APR", network: "Visa", issuerUrl: "https://www.capitalone.com/credit-cards/venture/", artworkUrl: "https://ecm.capitalone.com/WCM/card/products/venture_cardart_prim_323x203-1.png" },
+  { id: "capital-one-ventureone-excellent", name: "VentureOne Rewards", issuer: "Capital One", category: "Travel / excellent credit", annualFeeLabel: "$0", welcomeOffer: "20,000 miles after $500 in 3 months", rewardSummary: "1.25X miles on every purchase", purchaseApr: "0% intro APR for 15 months; then 18.49%–28.49% variable", network: "Mastercard", issuerUrl: "https://www.capitalone.com/credit-cards/ventureone/", artworkUrl: "https://ecm.capitalone.com/WCM/card/products/ventureone_cardart_prim_323x203.png" },
+  { id: "capital-one-ventureone-good", name: "VentureOne Rewards for Good Credit", issuer: "Capital One", category: "Travel / good credit", annualFeeLabel: "$0", welcomeOffer: null, rewardSummary: "1.25X miles on every purchase", purchaseApr: "28.99% variable APR", network: "Mastercard", issuerUrl: "https://www.capitalone.com/credit-cards/", artworkUrl: "https://ecm.capitalone.com/WCM/card/products/ventureone_cardart_prim_323x203.png" },
+  { id: "capital-one-quicksilver-excellent", name: "Quicksilver Rewards", issuer: "Capital One", category: "Flat cash back / excellent credit", annualFeeLabel: "$0", welcomeOffer: "$200 after $500 in 3 months", rewardSummary: "Unlimited 1.5% cash back", purchaseApr: "0% intro APR for 15 months; then 18.49%–28.49% variable", network: "Mastercard", issuerUrl: "https://www.capitalone.com/credit-cards/quicksilver/", artworkUrl: "https://ecm.capitalone.com/WCM/card/products/quicksilver_cardart.png" },
+  { id: "capital-one-quicksilver-good", name: "Quicksilver Rewards for Good Credit", issuer: "Capital One", category: "Flat cash back / good credit", annualFeeLabel: "$0", welcomeOffer: null, rewardSummary: "Unlimited 1.5% cash back", purchaseApr: "28.99% variable APR", network: "Mastercard", issuerUrl: "https://www.capitalone.com/credit-cards/", artworkUrl: "https://ecm.capitalone.com/WCM/card/products/quicksilver_cardart.png" },
+  { id: "capital-one-savor-excellent", name: "Savor Rewards", issuer: "Capital One", category: "Dining, entertainment, groceries / excellent credit", annualFeeLabel: "$0", welcomeOffer: "Limited-time $250 after $500 in 3 months", rewardSummary: "3% dining, entertainment, and grocery stores; 1% other purchases", purchaseApr: "0% intro APR for 12 months; then 18.49%–28.49% variable", network: "Mastercard", issuerUrl: "https://www.capitalone.com/credit-cards/savor/", artworkUrl: "https://ecm.capitalone.com/WCM/card/products/new-savor-card-art.png", extraFilters: ["cash-back"] },
+  { id: "capital-one-savor-good", name: "Savor Rewards for Good Credit", issuer: "Capital One", category: "Dining, entertainment, groceries / good credit", annualFeeLabel: "$0", welcomeOffer: null, rewardSummary: "3% dining, entertainment, and grocery stores; 1% other purchases", purchaseApr: "28.99% variable APR", network: "Mastercard", issuerUrl: "https://www.capitalone.com/credit-cards/", artworkUrl: "https://ecm.capitalone.com/WCM/card/products/new-savor-card-art.png", extraFilters: ["cash-back"] },
+  { id: "capital-one-savorone-fair", name: "SavorOne Rewards", issuer: "Capital One", category: "Dining, entertainment, groceries / fair credit", annualFeeLabel: "$39", welcomeOffer: null, rewardSummary: "3% dining, entertainment, and grocery stores; 1% other purchases", purchaseApr: "28.99% variable APR", network: "Mastercard", issuerUrl: "https://www.capitalone.com/credit-cards/", artworkUrl: "https://ecm.capitalone.com/WCM/card/products/savorone-2025-cardart.png", extraFilters: ["cash-back"] },
+  { id: "capital-one-quicksilverone", name: "QuicksilverOne Rewards", issuer: "Capital One", category: "Flat cash back / fair credit", annualFeeLabel: "$39", welcomeOffer: null, rewardSummary: "Unlimited 1.5% cash back; credit-building positioning", purchaseApr: "28.99% variable APR", network: "Mastercard", issuerUrl: "https://www.capitalone.com/credit-cards/quicksilverone/", artworkUrl: "https://ecm.capitalone.com/WCM/card/products/quicksilver_one_cardart.png" },
+  { id: "capital-one-savor-student", name: "Savor Rewards for Students", issuer: "Capital One", category: "Student / dining and entertainment", annualFeeLabel: "$0", welcomeOffer: "Limited-time $100 after $300 in 3 months", rewardSummary: "3% dining, entertainment, and grocery stores; 1% other purchases", purchaseApr: "18.49%–28.49% variable APR", network: "Mastercard", issuerUrl: "https://www.capitalone.com/credit-cards/savor-student/", artworkUrl: "https://ecm.capitalone.com/WCM/card/products/new-savor-card-art.png", extraFilters: ["cash-back"] },
+  { id: "capital-one-quicksilver-student", name: "Quicksilver Rewards for Students", issuer: "Capital One", category: "Student / flat cash back", annualFeeLabel: "$0", welcomeOffer: "Limited-time $100 after $300 in 3 months", rewardSummary: "Unlimited 1.5% cash back", purchaseApr: "18.49%–28.49% variable APR", network: "Mastercard", issuerUrl: "https://www.capitalone.com/credit-cards/quicksilver-student/", artworkUrl: "https://ecm.capitalone.com/WCM/card/products/quicksilver_cardart.png" },
+  { id: "capital-one-quicksilver-secured", name: "Quicksilver Secured Rewards", issuer: "Capital One", category: "Secured / cash back", annualFeeLabel: "$0", welcomeOffer: null, rewardSummary: "Unlimited 1.5% cash back; $200 minimum refundable deposit", purchaseApr: "28.99% variable APR", network: "Mastercard", issuerUrl: "https://www.capitalone.com/credit-cards/quicksilver-secured/", artworkUrl: "https://ecm.capitalone.com/WCM/card/products/quicksilver_cardart.png" },
+  { id: "capital-one-platinum-secured", name: "Platinum Secured", issuer: "Capital One", category: "Secured / credit building", annualFeeLabel: "$0", welcomeOffer: null, rewardSummary: "Credit building; $49, $99, or $200 refundable deposit", purchaseApr: "28.99% variable APR", network: "Mastercard", issuerUrl: "https://www.capitalone.com/credit-cards/platinum-secured/", artworkUrl: "https://ecm.capitalone.com/WCM/card/products/plat_cardart_prim_323x203.png" },
+
+  // Citi
+  { id: "citi-strata-elite", name: "Citi Strata Elite℠ Card", issuer: "Citi", category: "Premium travel and dining", annualFeeLabel: "$595", welcomeOffer: "75,000 ThankYou points after qualifying purchases", rewardSummary: "ThankYou points on travel and dining; annual hotel benefit", purchaseApr: "Verify current purchase APR", network: "Mastercard", issuerUrl: "https://www.citi.com/credit-cards/citi-strata-elite-credit-card", artworkUrl: "https://aemapi.citi.com/content/dam/cfs/uspb/usmkt/cards/en/static/images/citi-strata-elite-credit-card/citi-strata-elite-credit-card_306x192.webp", foreignTransactionFee: "$0" },
+  { id: "citi-double-cash", name: "Citi Double Cash® Card", issuer: "Citi", category: "Flat cash back", annualFeeLabel: "$0", welcomeOffer: "$200 cash back after qualifying purchases", rewardSummary: "Unlimited cash back; verify current earn mechanics", purchaseApr: "Low intro APR on balance transfers; verify current duration", network: "Mastercard", issuerUrl: "https://www.citi.com/credit-cards/citi-double-cash-credit-card", artworkUrl: "https://aemapi.citi.com/content/dam/cfs/uspb/usmkt/cards/en/static/images/citi-double-cash-credit-card/citi-double-cash-credit-card_306x192.webp" },
+  { id: "citi-diamond-preferred", name: "Citi® Diamond Preferred® Credit Card", issuer: "Citi", category: "Balance transfer / low intro APR", annualFeeLabel: "$0", welcomeOffer: null, rewardSummary: "Citi Flex Pay; no rewards highlighted", purchaseApr: "Intro balance-transfer APR for 21 months; intro purchase APR for 12 months", network: "Mastercard", issuerUrl: "https://www.citi.com/credit-cards/citi-diamond-preferred-credit-card", artworkUrl: "https://aemapi.citi.com/content/dam/cfs/uspb/usmkt/cards/en/static/images/citi-diamond-preferred-credit-card/citi-diamond-preferred-credit-card_306x192.webp" },
+  { id: "citi-strata", name: "Citi Strata℠ Card", issuer: "Citi", category: "Everyday points", annualFeeLabel: "$0", welcomeOffer: "20,000 ThankYou points after qualifying purchases", rewardSummary: "Rewards at supermarkets, gas stations, restaurants, and more", purchaseApr: "Low intro APR; verify current duration and range", network: "Mastercard", issuerUrl: "https://www.citi.com/credit-cards/citi-strata-credit-card", artworkUrl: "https://aemapi.citi.com/content/dam/cfs/uspb/usmkt/cards/en/static/images/citi-strata-credit-card/citi-strata-credit-card_306x192.webp" },
+  { id: "citi-simplicity", name: "Citi Simplicity® Credit Card", issuer: "Citi", category: "Long intro APR / balance transfer", annualFeeLabel: "$0", welcomeOffer: null, rewardSummary: "No late fees ever; no rewards highlighted", purchaseApr: "Intro APR on purchases and balance transfers for 18 months", network: "Mastercard", issuerUrl: "https://www.citi.com/credit-cards/citi-simplicity-credit-card", artworkUrl: "https://aemapi.citi.com/content/dam/cfs/uspb/usmkt/cards/en/static/images/citi-simplicity-credit-card/citi-simplicity-credit-card_306x192.webp" },
+  { id: "citi-strata-premier", name: "Citi Strata Premier® Card", issuer: "Citi", category: "Travel and everyday points", annualFeeLabel: "$95", welcomeOffer: "60,000 ThankYou points after qualifying purchases", rewardSummary: "Points on travel and everyday purchases; annual hotel benefit", purchaseApr: "Verify current purchase APR", network: "Mastercard", issuerUrl: "https://www.citi.com/credit-cards/citi-strata-premier-credit-card", artworkUrl: "https://aemapi.citi.com/content/dam/cfs/uspb/usmkt/cards/en/static/images/citi-strata-premier-credit-card/citi-strata-premier-credit-card_306x192.webp", foreignTransactionFee: "$0" },
+  { id: "citi-secured", name: "Citi® Secured Mastercard®", issuer: "Citi", category: "Secured / credit building", annualFeeLabel: "$0", welcomeOffer: null, rewardSummary: "Free FICO score access; $0 unauthorized-purchase liability; selectable due date", purchaseApr: "Verify deposit and purchase APR", network: "Mastercard", issuerUrl: "https://www.citi.com/credit-cards/citi-secured-credit-card", artworkUrl: "https://aemapi.citi.com/content/dam/cfs/uspb/usmkt/cards/en/static/images/citi-secured-credit-card/citi-secured-credit-card_306x192.webp" },
+
+  // Wells Fargo
+  { id: "wells-fargo-active-cash", name: "Active Cash® Card", issuer: "Wells Fargo", category: "Flat cash back", annualFeeLabel: "$0", welcomeOffer: "$200 after $500 in 3 months", rewardSummary: "Unlimited 2% cash rewards on purchases", purchaseApr: "Intro APR for 12 months; verify current post-intro rate", network: "Visa", issuerUrl: "https://creditcards.wellsfargo.com/active-cash-credit-card/", artworkUrl: "https://creditcards.wellsfargo.com/rv/bcs/production/active-cash.9hXxvW2T_1Thrzz.webp" },
+  { id: "wells-fargo-reflect", name: "Reflect® Card", issuer: "Wells Fargo", category: "Long intro APR / balance transfer", annualFeeLabel: "$0", welcomeOffer: null, rewardSummary: "No rewards highlighted", purchaseApr: "Intro APR on purchases and balance transfers for 21 months", network: "Visa", issuerUrl: "https://creditcards.wellsfargo.com/reflect-visa-credit-card/", artworkUrl: "https://creditcards.wellsfargo.com/rv/bcs/production/reflect.B_Nc3OR8_Z2bs2bf.webp" },
+  { id: "wells-fargo-autograph", name: "Autograph® Card", issuer: "Wells Fargo", category: "Travel and everyday points", annualFeeLabel: "$0", welcomeOffer: "20,000 points after $1,000 in 3 months", rewardSummary: "Unlimited 3X on restaurants, travel, and other select categories; 1X elsewhere", purchaseApr: "Intro APR for 12 months", network: "Visa", issuerUrl: "https://creditcards.wellsfargo.com/autograph-visa-credit-card/", artworkUrl: "https://creditcards.wellsfargo.com/rv/bcs/production/autograph.B5C6nsw-_Z2rG3ci.webp", foreignTransactionFee: "$0" },
+  { id: "wells-fargo-autograph-journey", name: "Autograph Journey℠ Card", issuer: "Wells Fargo", category: "Premium travel", annualFeeLabel: "$95", welcomeOffer: "60,000 points after $4,000 in 3 months", rewardSummary: "Enhanced points on travel; verify current category rates", purchaseApr: "Verify current purchase APR", network: "Visa", issuerUrl: "https://creditcards.wellsfargo.com/autograph-journey-visa-credit-card/", artworkUrl: "https://creditcards.wellsfargo.com/rv/bcs/production/autograph-journey.CX8QRJ3I_Z23rMfB.webp", foreignTransactionFee: "$0" },
+
+  // Bank of America
+  { id: "bank-of-america-customized-cash-rewards", name: "Customized Cash Rewards", issuer: "Bank of America", category: "Customizable cash back", annualFeeLabel: "$0", welcomeOffer: "$200 online cash reward after qualifying purchases", rewardSummary: "First year: 6% chosen category; 2% grocery and wholesale; 1% other; category cap applies", purchaseApr: "0% intro APR for 15 billing cycles; then 17.49%–27.49% variable", network: "Visa", issuerUrl: "https://www.bankofamerica.com/credit-cards/products/cash-back-credit-card/", artworkUrl: "https://www.bankofamerica.com/content/images/ContextualSiteGraphics/CreditCardArt/en_US/Approved_PCM/8ckn_cshsigcm_v_300x188_promo02.png" },
+  { id: "bank-of-america-unlimited-cash-rewards", name: "Unlimited Cash Rewards", issuer: "Bank of America", category: "Flat cash back", annualFeeLabel: "$0", welcomeOffer: "Limited-time $250 after qualifying purchases", rewardSummary: "Unlimited 1.5% cash back; relationship bonuses may apply", purchaseApr: "0% intro APR for 15 billing cycles; then 17.49%–27.49% variable", network: "Visa", issuerUrl: "https://www.bankofamerica.com/credit-cards/products/unlimited-cash-back-credit-card/", artworkUrl: "https://www.bankofamerica.com/content/images/ContextualSiteGraphics/CreditCardArt/en_US/Approved_PCM/8cty_cshsigcm_v_300x188_promo02.png" },
+  { id: "bankamericard", name: "BankAmericard®", issuer: "Bank of America", category: "Long intro APR / balance transfer", annualFeeLabel: "$0", welcomeOffer: null, rewardSummary: "No penalty APR; no rewards highlighted", purchaseApr: "0% intro APR for 21 billing cycles; then 14.99%–25.99% variable", network: "Mastercard", issuerUrl: "https://www.bankofamerica.com/credit-cards/products/bankamericard-credit-card/", artworkUrl: "https://www.bankofamerica.com/content/images/ContextualSiteGraphics/CreditCardArt/en_US/Approved_PCM/8cae_nrwcm_mc_250x158.png" },
+  { id: "bank-of-america-travel-rewards", name: "Travel Rewards", issuer: "Bank of America", category: "Travel", annualFeeLabel: "$0", welcomeOffer: "25,000 points after qualifying purchases", rewardSummary: "Unlimited 1.5 points per $1; 3 points per $1 through BofA Travel; no foreign transaction fee", purchaseApr: "0% intro APR for 15 billing cycles; then 17.49%–27.49% variable", network: "Visa", issuerUrl: "https://www.bankofamerica.com/credit-cards/products/travel-rewards-credit-card/", artworkUrl: "https://www.bankofamerica.com/content/images/ContextualSiteGraphics/CreditCardArt/en_US/Approved_PCM/8blm_trvsigcm_v_250x158.png", foreignTransactionFee: "$0" },
+  { id: "bank-of-america-premium-rewards", name: "Premium Rewards®", issuer: "Bank of America", category: "Travel and dining", annualFeeLabel: "$95", welcomeOffer: "60,000 points after $4,000 in 90 days", rewardSummary: "2X travel and dining; 1.5X other; up to $200 in travel statement credits; no foreign transaction fee", purchaseApr: "19.49%–27.49% variable APR", network: "Visa", issuerUrl: "https://www.bankofamerica.com/credit-cards/products/premium-rewards-credit-card/", artworkUrl: "https://www.bankofamerica.com/content/images/ContextualSiteGraphics/CreditCardArt/en_US/Approved_PCM/bofa_prmsigcm_255x158.png", foreignTransactionFee: "$0" },
+  { id: "bank-of-america-premium-rewards-elite", name: "Premium Rewards® Elite", issuer: "Bank of America", category: "Premium travel", annualFeeLabel: "$550", welcomeOffer: "75,000 points after $5,000 in 90 days", rewardSummary: "2X travel and dining; 1.5X other; up to $570 in credits; Priority Pass; 20% airfare savings", purchaseApr: "19.49%–27.49% variable APR", network: "Visa Infinite", issuerUrl: "https://www.bankofamerica.com/credit-cards/products/premium-rewards-elite-credit-card/", artworkUrl: "https://www.bankofamerica.com/content/images/ContextualSiteGraphics/CreditCardArt/en_US/Approved_PCM/prmeltcm_v_infinite_250px.png", foreignTransactionFee: "$0" },
+
+  // Discover
+  { id: "discover-it-cash-back", name: "Discover it® Cash Back", issuer: "Discover", category: "Rotating cash back", annualFeeLabel: "$0", welcomeOffer: "Unlimited Cashback Match at the end of year one", rewardSummary: "5% rotating quarterly categories up to the activated maximum; 1% other purchases", purchaseApr: "0% intro APR for 15 months; then 17.49%–26.49% variable", network: "Discover", issuerUrl: "https://www.discover.com/credit-cards/cash-back/it-card/", ratesAndFeesUrl: "https://www.capitalone.com/credit-cards/lp/credit-card-agreements/", artworkUrl: "https://ecm.capitalone.com/WCM/dfs-card/products/cardart-cashit/rdesktop.png" },
+  { id: "discover-it-student-cash-back", name: "Discover it® Student Cash Back", issuer: "Discover", category: "Student / rotating cash back", annualFeeLabel: "$0", welcomeOffer: "$100 after $300 in 3 months; unlimited Cashback Match at end of year one", rewardSummary: "5% rotating quarterly categories up to the activated maximum; 1% other purchases", purchaseApr: "0% intro APR for 6 months; then 16.49%–25.49% variable", network: "Discover", issuerUrl: "https://www.discover.com/credit-cards/student-credit-card/it-card/", ratesAndFeesUrl: "https://www.capitalone.com/credit-cards/lp/credit-card-agreements/", artworkUrl: "https://ecm.capitalone.com/WCM/dfs-card/products/cardart-0introapr-studentit/rdesktop.png" },
+  { id: "discover-it-student-chrome", name: "Discover it® Student Chrome", issuer: "Discover", category: "Student / gas and dining", annualFeeLabel: "$0", welcomeOffer: "Unlimited Cashback Match at the end of year one", rewardSummary: "2% at gas stations and restaurants up to $1,000 combined quarterly; 1% other", purchaseApr: "0% intro APR for 6 months; then 16.49%–25.49% variable", network: "Discover", issuerUrl: "https://www.discover.com/credit-cards/student-credit-card/chrome-card/", ratesAndFeesUrl: "https://www.capitalone.com/credit-cards/lp/credit-card-agreements/", artworkUrl: "https://ecm.capitalone.com/WCM/dfs-card/products/cardart-0introapr-cashchrome/rdesktop.png", extraFilters: ["cash-back"] },
+  { id: "discover-it-miles", name: "Discover it® Miles", issuer: "Discover", category: "Flat-rate travel", annualFeeLabel: "$0", welcomeOffer: "Unlimited Discover Match of first-year miles", rewardSummary: "1.5X miles on every purchase", purchaseApr: "0% intro APR for 15 months; then 17.49%–26.49% variable", network: "Discover", issuerUrl: "https://www.discover.com/credit-cards/travel/", ratesAndFeesUrl: "https://www.capitalone.com/credit-cards/lp/credit-card-agreements/", artworkUrl: "https://ecm.capitalone.com/WCM/dfs-card/products/cardart-0introapr-miles/rdesktop.png" },
+  { id: "discover-it-chrome", name: "Discover it® Chrome Gas & Restaurants", issuer: "Discover", category: "Gas and dining cash back", annualFeeLabel: "$0", welcomeOffer: "Unlimited Cashback Match at the end of year one", rewardSummary: "2% at gas stations and restaurants up to $1,000 combined quarterly; 1% other", purchaseApr: "0% intro APR for 15 months; then 17.49%–26.49% variable", network: "Discover", issuerUrl: "https://www.discover.com/credit-cards/cash-back/chrome/", ratesAndFeesUrl: "https://www.capitalone.com/credit-cards/lp/credit-card-agreements/", artworkUrl: "https://ecm.capitalone.com/WCM/dfs-card/products/cardart-0introapr-cashchrome/rdesktop.png" },
+
+  // U.S. Bank
+  { id: "us-bank-smartly", name: "U.S. Bank Smartly™ Visa Signature® Card", issuer: "U.S. Bank", category: "Flat cash back / relationship rewards", annualFeeLabel: "$0", welcomeOffer: null, rewardSummary: "Unlimited 2% cash back; up to 4% on the first $10,000 per billing cycle with qualifying balances", purchaseApr: "0% intro APR for 12 billing cycles; then 18.24%–28.24% variable", network: "Visa", issuerUrl: "https://www.usbank.com/credit-cards/bank-smartly-visa-signature-credit-card.html", artworkUrl: "https://www.usbank.com/content/dam/usbank/en/images/illustrations/card-art/credit-cards/photo-bank-smartly-card-art.png", artworkOrientation: "portrait" },
+  { id: "us-bank-shield", name: "U.S. Bank Shield® Visa® Card", issuer: "U.S. Bank", category: "Long intro APR", annualFeeLabel: "$0", welcomeOffer: null, rewardSummary: "4% cash back on prepaid air, hotel, and car reservations through the Travel Center", purchaseApr: "0% intro APR for 21 billing cycles; then 16.99%–27.99% variable", network: "Visa", issuerUrl: "https://www.usbank.com/credit-cards/shield-visa-credit-card.html", artworkUrl: "https://www.usbank.com/content/dam/usbank/en/images/illustrations/card-art/credit-cards/shield-credit-card-transparent.png", artworkOrientation: "portrait" },
+  { id: "us-bank-cash-plus", name: "U.S. Bank Cash+® Visa Signature® Card", issuer: "U.S. Bank", category: "Customizable cash back", annualFeeLabel: "$0", welcomeOffer: "$200 after $1,000 in 90 days", rewardSummary: "5% in two chosen categories up to $2,000 quarterly; 2% in one everyday category; 1% other", purchaseApr: "0% intro APR for 15 billing cycles; then 17.74%–27.99% variable", network: "Visa", issuerUrl: "https://www.usbank.com/credit-cards/cash-plus-visa-signature-credit-card.html", artworkUrl: "https://www.usbank.com/content/dam/usbank/en/images/illustrations/card-art/credit-cards/photo-cash-plus-signature-lg.png", artworkOrientation: "portrait" },
+  { id: "us-bank-altitude-connect", name: "U.S. Bank Altitude® Connect Visa Signature® Card", issuer: "U.S. Bank", category: "Travel and gas", annualFeeLabel: "$0", welcomeOffer: "20,000 points after $1,000 in 90 days", rewardSummary: "5X Travel Center hotels and cars; 4X travel and eligible gas/EV; 2X dining, streaming, grocery", purchaseApr: "0% intro APR for 15 billing cycles; then 17.49%–27.49% variable", network: "Visa", issuerUrl: "https://www.usbank.com/credit-cards/altitude-connect-visa-signature-credit-card.html", artworkUrl: "https://www.usbank.com/content/dam/usbank/en/images/illustrations/card-art/credit-cards/photo-altitude-connect-consumer.png", artworkOrientation: "portrait", foreignTransactionFee: "$0" },
+  { id: "us-bank-altitude-go", name: "U.S. Bank Altitude® Go Visa Signature® Card", issuer: "U.S. Bank", category: "Dining and everyday points", annualFeeLabel: "$0", welcomeOffer: "20,000 points after $1,000 in 90 days", rewardSummary: "4X dining up to $2,000 quarterly; 2X grocery, gas/EV, and streaming; $15 streaming credit", purchaseApr: "0% intro APR for 15 billing cycles; then 17.49%–27.49% variable", network: "Visa", issuerUrl: "https://www.usbank.com/credit-cards/altitude-go-visa-signature-credit-card.html", artworkUrl: "https://www.usbank.com/content/dam/usbank/en/images/illustrations/card-art/credit-cards/altitude-go-visa-signature-credit-card.png", artworkOrientation: "portrait" },
+  { id: "us-bank-split", name: "U.S. Bank Split™ World Mastercard®", issuer: "U.S. Bank", category: "Flexible financing", annualFeeLabel: "$0 / verify", welcomeOffer: null, rewardSummary: "Purchases become 3-month plans with no fee or interest; eligible plans can extend for a fixed fee", purchaseApr: "Not a conventional revolving-rewards structure; verify current terms", network: "Mastercard", issuerUrl: "https://www.usbank.com/credit-cards/split-card-world-mastercard-credit-card.html", artworkUrl: "https://www.usbank.com/content/dam/usbank/en/images/illustrations/card-art/credit-cards/split-card-world-mastercard-credit-card.png", artworkOrientation: "portrait" },
+  { id: "us-bank-altitude-go-secured", name: "U.S. Bank Altitude® Go Secured Visa® Card", issuer: "U.S. Bank", category: "Secured / dining rewards", annualFeeLabel: "$0", welcomeOffer: null, rewardSummary: "4X dining up to quarterly cap; 2X grocery, gas/EV, and streaming; $300–$5,000 deposit", purchaseApr: "Verify current purchase APR", network: "Visa", issuerUrl: "https://www.usbank.com/credit-cards/altitude-go-secured-visa-credit-card.html", artworkUrl: "https://www.usbank.com/content/dam/usbank/en/images/illustrations/card-art/credit-cards/altitude-go-secured-credit-card.png", artworkOrientation: "portrait" },
+  { id: "us-bank-cash-plus-secured", name: "U.S. Bank Cash+® Secured Visa® Card", issuer: "U.S. Bank", category: "Secured / customizable cash back", annualFeeLabel: "$0", welcomeOffer: null, rewardSummary: "5% in two chosen categories; 2% in one everyday category; $300–$5,000 deposit", purchaseApr: "Verify current purchase APR", network: "Visa", issuerUrl: "https://www.usbank.com/credit-cards/cash-plus-secured-visa-credit-card.html", artworkUrl: "https://www.usbank.com/content/dam/usbank/en/images/illustrations/card-art/credit-cards/cash-plus-secured-lg.png", artworkOrientation: "portrait" },
+  { id: "us-bank-secured-visa", name: "U.S. Bank Secured Visa® Card", issuer: "U.S. Bank", category: "Secured / credit building", annualFeeLabel: "$0", welcomeOffer: null, rewardSummary: "Credit-score access; selectable due date; zero fraud liability; $300–$5,000 deposit", purchaseApr: "Verify current purchase APR", network: "Visa", issuerUrl: "https://www.usbank.com/credit-cards/secured-visa-credit-card.html", artworkUrl: "https://www.usbank.com/content/dam/usbank/en/images/illustrations/card-art/credit-cards/photo-classic-secured-visa-vertical-2x3.png", artworkOrientation: "portrait" },
+
+  // Bilt
+  { id: "bilt-blue", name: "Bilt Blue Card", issuer: "Bilt", category: "Housing and everyday rewards", annualFeeLabel: "$0", welcomeOffer: "$100 Bilt Cash", rewardSummary: "Up to 4X partner restaurants; up to 3X Bilt Travel hotels; 3X Lyft; up to 1.25X housing", purchaseApr: "10% intro APR for 12 billing cycles; then 26.74%–34.74% variable", network: "Mastercard", issuerUrl: "https://www.bilt.com/card", ratesAndFeesUrl: "https://legal.cardless.com/schumer/bilt/rates_and_fees.pdf", artworkUrl: "https://static.biltrewards.com/assets/wallet/bilt-tahoe.png", foreignTransactionFee: "$0" },
+  { id: "bilt-obsidian", name: "Bilt Obsidian Card", issuer: "Bilt", category: "Dining or grocery / housing rewards", annualFeeLabel: "$95", welcomeOffer: "$200 Bilt Cash", rewardSummary: "Up to 6X partner restaurants; choice of 3X dining or grocery; up to 4X Bilt Travel; up to 1.25X housing", purchaseApr: "10% intro APR for 12 billing cycles; then 26.74%–34.74% variable", network: "Mastercard", issuerUrl: "https://www.bilt.com/card", ratesAndFeesUrl: "https://legal.cardless.com/schumer/bilt/rates_and_fees.pdf", artworkUrl: "https://static.biltrewards.com/assets/wallet/bilt-vail.png", foreignTransactionFee: "$0" },
+  { id: "bilt-palladium", name: "Bilt Palladium Card", issuer: "Bilt", category: "Premium housing and travel rewards", annualFeeLabel: "$495", welcomeOffer: "50,000 points and Gold Status after $4,000 in 90 days, plus $300 Bilt Cash", rewardSummary: "Up to 5X partner restaurants; up to 4X Bilt Travel; 4X Lyft; 2X other; up to 1.25X housing", purchaseApr: "10% intro APR for 12 billing cycles; then 26.74%–34.74% variable", network: "Mastercard", issuerUrl: "https://www.bilt.com/card", ratesAndFeesUrl: "https://legal.cardless.com/schumer/bilt/rates_and_fees.pdf", artworkUrl: "https://static.biltrewards.com/assets/wallet/bilt-aspen.png", foreignTransactionFee: "$0" },
 ];
 
-export const fallbackCards: Card[] = fallbackCardDefinitions.map((card) => ({
-  ...card,
-  dataSource: "editorial-fallback",
-}));
+export const fallbackCards: Card[] = seeds.map(toCard);

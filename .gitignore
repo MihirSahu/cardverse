@@ -7,3 +7,6 @@ out/
 .DS_Store
 Thumbs.db
 tsconfig.tsbuildinfo
+data/*.db
+data/*.db-shm
+data/*.db-wal

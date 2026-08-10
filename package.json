@@ -6,18 +6,28 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "db:generate": "node --require ./scripts/node-user-info-fallback.cjs ./node_modules/drizzle-kit/bin.cjs generate",
+    "db:migrate": "node --require ./scripts/node-user-info-fallback.cjs ./node_modules/drizzle-kit/bin.cjs migrate",
+    "cards:list": "node --require ./scripts/node-user-info-fallback.cjs --import tsx scripts/list-cards.ts",
+    "cards:refresh": "node --require ./scripts/node-user-info-fallback.cjs --import tsx scripts/refresh-cards.ts",
+    "test:card-cache": "node --require ./scripts/node-user-info-fallback.cjs --import tsx scripts/verify-card-cache.ts"
   },
   "dependencies": {
     "@cardapi/client": "^0.2.0",
+    "better-sqlite3": "^13.0.2",
+    "drizzle-orm": "^0.45.2",
     "next": "16.2.12",
     "react": "19.2.8",
     "react-dom": "19.2.8"
   },
   "devDependencies": {
+    "@types/better-sqlite3": "^9.6.0",
     "@types/node": "^24.10.0",
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.2",
+    "drizzle-kit": "^0.31.10",
+    "tsx": "^4.23.5",
     "typescript": "^5.9.3"
   },
   "overrides": {

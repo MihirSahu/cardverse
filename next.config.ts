@@ -1,20 +1,16 @@
 import type { NextConfig } from "next";
 
+import { optimizedArtworkPatterns } from "./lib/artwork";
+
 const nextConfig: NextConfig = {
   reactStrictMode: true,
+  serverExternalPackages: ["better-sqlite3"],
   images: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "creditcards.chase.com",
-        pathname: "/content/dam/jpmc-marketplace/card-art/**",
-      },
-      {
-        protocol: "https",
-        hostname: "icm.aexp-static.com",
-        pathname: "/Internet/Acquisition/US_en/AppContent/OneSite/category/cardarts/**",
-      },
-    ],
+    remotePatterns: optimizedArtworkPatterns.map((pattern) => ({
+      protocol: "https" as const,
+      hostname: pattern.hostname,
+      pathname: `${pattern.pathnamePrefix}**`,
+    })),
   },
 };
 

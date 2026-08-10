@@ -228,7 +228,11 @@ export function CardDetailPanel({ card, index, total, onClose }: CardDetailPanel
             <span>Visit issuer</span>
             <ExternalIcon />
           </a>
-          <a className="secondary-action" href={card.ratesAndFeesUrl} target="_blank" rel="noreferrer">Rates & fees</a>
+          {card.ratesAndFeesUrl && (
+            <a className="secondary-action" href={card.ratesAndFeesUrl} target="_blank" rel="noreferrer">
+              Rates & fees
+            </a>
+          )}
         </div>
         <div className="detail-source-row">
           <span>
